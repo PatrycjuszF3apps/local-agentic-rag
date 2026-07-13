@@ -1,36 +1,76 @@
-# Python
+# ==========================================
+# Python & Virtual Environments
+# ==========================================
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
-
-# Virtual Environments
 .venv/
 venv/
-env/
 
-# Node.js
+# ==========================================
+# Application Directory (Whitelist Approach)
+# ==========================================
+# 1. Ignore all contents inside the app directory
+app/*
+
+# 2. Allow the essential rag.py file
+!app/rag.py
+
+# 3. Allow and precisely filter .opencode
+!app/.opencode/
+app/.opencode/*
+!app/.opencode/commands/
+app/.opencode/commands/*
+!app/.opencode/commands/rag-deep.md
+
+# 4. Allow and precisely filter _raw_input
+!app/_raw_input/
+app/_raw_input/*
+!app/_raw_input/.gitkeep
+!app/_raw_input/.processed/
+app/_raw_input/.processed/*
+!app/_raw_input/.processed/.gitkeep
+
+# ==========================================
+# Database & Local RAG Data
+# ==========================================
+.lancedb/
+_raw_input/*
+!_raw_input/.gitkeep
+
+# ==========================================
+# Node.js & Dependencies
+# ==========================================
 node_modules/
 npm-debug.log*
 package-lock.json
 
-# Database & Local RAG Data
-.lancedb/
-_raw_input/*
-!_raw_input/.gitkeep
+# ==========================================
 # Environment Variables & Secrets
+# ==========================================
 .env
 *.pem
 
+# ==========================================
 # IDEs & Editors
+# ==========================================
 .idea/
 .vscode/
 *.swp
 
+# ==========================================
 # OS Generated Files
+# ==========================================
 .DS_Store
 Thumbs.db
 ehthumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 
+# ==========================================
 # Docker
+# ==========================================
 docker-compose.override.yml
