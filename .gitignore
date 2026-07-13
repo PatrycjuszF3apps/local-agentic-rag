@@ -16,8 +16,8 @@ package-lock.json
 
 # Database & Local RAG Data
 .lancedb/
-_raw_input/.processed/
-
+_raw_input/*
+!_raw_input/.gitkeep
 # Environment Variables & Secrets
 .env
 *.pem
