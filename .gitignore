@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Node.js
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Database & Local RAG Data
+.lancedb/
+_raw_input/.processed/
+
+# Environment Variables & Secrets
+.env
+*.pem
+
+# IDEs & Editors
+.idea/
+.vscode/
+*.swp
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Docker
+docker-compose.override.yml
