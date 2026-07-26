@@ -46,6 +46,13 @@ WORKDIR /app
 # Switch to user
 USER local-agentic-rag
 
+# Create directories for named volumes to ensure proper ownership
+RUN mkdir -p /home/local-agentic-rag/.opencode \
+    /home/local-agentic-rag/.config/opencode \
+    /home/local-agentic-rag/.cache/opencode \
+    /home/local-agentic-rag/agent \
+    /home/local-agentic-rag/.cache/huggingface
+
 # Copy scripts directory
 COPY --chown=local-agentic-rag:local-agentic-rag scripts /home/local-agentic-rag/.local/bin/scripts
 RUN chmod -R +x /home/local-agentic-rag/.local/bin/scripts
