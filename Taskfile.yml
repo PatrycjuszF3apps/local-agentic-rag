@@ -1,0 +1,92 @@
+# https://taskfile.dev
+version: '3'
+
+vars:
+  EXEC_APP: docker compose exec -u local-agentic-rag local_agentic_rag
+
+tasks:
+  build-no-cache:
+    desc: Rebuild all images and recreate containers
+    cmds:
+      - docker compose build --no-cache
+      - docker compose up -d
+  build:
+      desc: recreate containers
+      cmds:
+        - docker compose build
+        - docker compose up -d
+
+  up:
+    desc: Start service
+    cmd: docker compose up -d
+
+  log:
+    desc: Print and follow container logs
+    cmd: docker compose logs -f
+
+  down:
+    desc: Stop and remove all containers
+    cmd: docker compose down
+  
+  stop:
+    desc: Stop containers
+    cmd: docker compose stop
+
+  restart:
+    desc: Recreate and restart all services (picks up config changes)
+    cmd: docker compose up -d --force-recreate
+
+  shell:
+    desc: Open shell in app container
+    interactive: true
+    cmd: "{{.EXEC_APP}} bash"
+
+  opencode:sync:
+    desc: Sync LM Studio models inside the container
+    cmd: "{{.EXEC_APP}} bash /home/local-agentic-rag/.local/bin/scripts/opencode/sync_lmstudio.sh"
+
+  opencode:run:
+    desc: Run opencode inside the container in agent-workspace
+    interactive: true
+    cmd: docker compose exec -u local-agentic-rag -w /home/local-agentic-rag/agent local_agentic_rag bash -c "~/.opencode/bin/opencode"
+
+  rag:sync:
+    desc: Synchronize and process documents for the RAG database
+    interactive: true
+    cmd: docker compose exec -u local-agentic-rag -w /home/local-agentic-rag/agent local_agentic_rag bash -c "/home/local-agentic-rag/.venv/bin/python3 /home/local-agentic-rag/agent/rag.py sync"
+
+  rag:wipe:
+    desc: Wipe the LanceDB database and reset processed files
+    interactive: true
+    cmd: docker compose exec -u local-agentic-rag -w /home/local-agentic-rag/agent local_agentic_rag bash -c "/home/local-agentic-rag/.venv/bin/python3 /home/local-agentic-rag/agent/rag.py wipe"
+
+  infrastructure:update-tools:
+    desc: Update CLI tools like opencode inside the container
+    interactive: true
+    cmd: "{{.EXEC_APP}} bash /home/local-agentic-rag/.local/bin/scripts/opencode/update.sh"
+
+  infrastructure:update-runtimes:
+    desc: Update Python and Node.js runtimes in the running container
+    cmd: docker compose exec -u root local_agentic_rag bash /home/local-agentic-rag/.local/bin/scripts/utils/update_runtimes.sh
+
+  infrastructure:update-rag:
+    desc: Update Python RAG dependencies in the virtual environment
+    cmd: "{{.EXEC_APP}} bash /home/local-agentic-rag/.local/bin/scripts/utils/update_rag.sh"
+
+  infrastructure:update-system:
+    desc: Update all OS packages in the running container
+    cmd: docker compose exec -u root local_agentic_rag bash /home/local-agentic-rag/.local/bin/scripts/utils/update_system.sh
+
+  infrastructure:update-base-image:
+    desc: Pull the latest base images and rebuild the container
+    cmds:
+      - docker compose build --pull --no-cache
+      - docker compose up -d
+
+  infrastructure:update-all:
+    desc: Run all live updates consecutively
+    cmds:
+      - task: infrastructure:update-system
+      - task: infrastructure:update-runtimes
+      - task: infrastructure:update-rag
+      - task: infrastructure:update-tools

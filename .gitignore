@@ -14,17 +14,7 @@ venv/
 # 1. Ignore all contents inside the app directory
 app/*
 
-# 2. Allow the essential rag.py file
-!app/rag.py
-
-# 3. Allow and precisely filter .opencode
-!app/.opencode/
-app/.opencode/*
-!app/.opencode/commands/
-app/.opencode/commands/*
-!app/.opencode/commands/rag-deep.md
-
-# 4. Allow and precisely filter _raw_input
+# 2. Allow and precisely filter _raw_input
 !app/_raw_input/
 app/_raw_input/*
 !app/_raw_input/.gitkeep
@@ -36,8 +26,6 @@ app/_raw_input/.processed/*
 # Database & Local RAG Data
 # ==========================================
 .lancedb/
-_raw_input/*
-!_raw_input/.gitkeep
 
 # ==========================================
 # Node.js & Dependencies

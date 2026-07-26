@@ -1,0 +1,25 @@
+services:
+  local_agentic_rag:
+    build:
+      context: ./docker/local_agentic_rag
+      args:
+        - UID=1000
+        - GID=1000
+    volumes:
+      - ./app:/app
+      - opencode_data:/home/local-agentic-rag/.opencode
+      - opencode_config:/home/local-agentic-rag/.config/opencode
+      - opencode_cache:/home/local-agentic-rag/.cache/opencode
+      - agent_workspace:/home/local-agentic-rag/agent
+      - huggingface_cache:/home/local-agentic-rag/.cache/huggingface
+    container_name: local_agentic_rag
+    environment:
+      - LM_STUDIO_API_BASE_URL=${LM_STUDIO_API_BASE_URL:-http://host.docker.internal:${LM_STUDIO_PORT:-1234}}
+    tty: true
+
+volumes:
+  opencode_data:
+  opencode_config:
+  opencode_cache:
+  agent_workspace:
+  huggingface_cache:

@@ -1,0 +1,6 @@
+services:
+  local_agentic_rag:
+    environment:
+      # Uncomment and replace <your-host-ip> and <lm-studio-port> with your actual LM Studio address and port
+      # Note: Replace <your-host-ip> with the actual IP address of the machine running LM Studio (e.g., 192.168.1.100) and <lm-studio-port> with the port your server is running on (default: 1234).
+      # - LM_STUDIO_API_BASE_URL=http://<your-host-ip>:<lm-studio-port>
