@@ -9,6 +9,26 @@ A local, serverless Retrieval-Augmented Generation (RAG) system utilizing [Lance
 - **Deep Investigative Agent:** Includes `rag-deep`, an OpenCode autonomous investigator that translates natural language queries into semantic keywords and iteratively drills down into the database to synthesize comprehensive answers.
 - **Dockerized Environment:** A pre-configured Docker setup (Ubuntu, Python, Node.js) ensures a consistent workspace and execution environment.
 
+## Screenshots
+
+**Data Ingestion & Syncing**  
+![Data Ingestion](assets/images/screenshot-1.jpg)  
+*Executing `task rag:sync` to embed local PDF documents into the vector database and syncing available local models via LM Studio.*
+
+<br>
+
+**Agentic Query in OpenCode**  
+![OpenCode Interface](assets/images/screenshot-2.jpg)  
+*Using the OpenCode interactive CLI to prompt the `rag-deep` agent for a complex, semantic query across the local database.*
+
+<br>
+
+**Autonomous Database Investigation**  
+![Agentic Execution](assets/images/screenshot-3.jpg)  
+*Triggered by the `rag-deep` command, the agent can iteratively execute commands to deeply explore the context. Here, it autonomously formulates a search query, retrieves data from the vector database, and synthesizes the final answer.*
+
+<br>
+
 ## LM Studio Integration
 
 This project was built with a core philosophy of 100% local, and cost-free execution. By integrating [LM Studio](https://lmstudio.ai/), a popular and user-friendly local LLM runner, the system remains completely independent of paid cloud providers (like OpenAI or Anthropic). You can run powerful agentic queries on your own hardware.
