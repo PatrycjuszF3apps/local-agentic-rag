@@ -3,6 +3,11 @@ import sys
 import shutil
 import zipfile
 import xml.etree.ElementTree as ET
+import logging
+
+# Suppress pypdf warnings (display only critical errors to prevent console spam and hangs)
+logging.getLogger("pypdf").setLevel(logging.ERROR)
+
 import lancedb
 import pandas as pd
 from sentence_transformers import SentenceTransformer
@@ -139,22 +144,32 @@ if os.path.exists(INPUT_DIR):
     # Create .processed directory if it doesn't exist
     os.makedirs(PROCESSED_DIR, exist_ok=True)
 
-    for filename in os.listdir(INPUT_DIR):
+    # Pre-filter files to get the total count for the progress meter
+    valid_files = [
+        f for f in os.listdir(INPUT_DIR)
+        if os.path.isfile(os.path.join(INPUT_DIR, f)) and f.lower().endswith(SUPPORTED_EXTENSIONS)
+    ]
+
+    total_files = len(valid_files)
+
+    # Process files using enumerate to track progress
+    for index, filename in enumerate(valid_files, start=1):
         file_path = os.path.join(INPUT_DIR, filename)
 
-        # Ignore subfolders and process only supported extensions
-        if os.path.isfile(file_path) and filename.lower().endswith(SUPPORTED_EXTENSIONS):
-            try:
-                content = extract_text_from_file(file_path)
+        # Real-time progress meter (sent to stderr so it doesn't interfere with agent's stdout parsing)
+        print(f"Processing file {index} of {total_files}: {filename}...", file=sys.stderr)
 
-                if content.strip():
-                    file_chunks = chunk_text(content)
-                    new_chunks.extend(file_chunks)
+        try:
+            content = extract_text_from_file(file_path)
 
-                # Move file to archive (even if empty, to avoid loops)
-                shutil.move(file_path, os.path.join(PROCESSED_DIR, filename))
-            except Exception as e:
-                pass
+            if content.strip():
+                file_chunks = chunk_text(content)
+                new_chunks.extend(file_chunks)
+
+            # Move file to archive (even if empty, to avoid loops)
+            shutil.move(file_path, os.path.join(PROCESSED_DIR, filename))
+        except Exception as e:
+            pass
 
 # If new documents are found, generate vectors and add them to the database
 if new_chunks:
